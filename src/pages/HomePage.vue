@@ -16,7 +16,7 @@
       const { pokemons, fetchPokemons } = usePokemon();
   
       onMounted(() => {
-        fetchPokemons(1);
+        fetchPokemons();
       });
   
       return { pokemons };

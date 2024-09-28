@@ -1,9 +1,17 @@
 <template>
   <div class="pokemon-lists">
     <div class="pokemon-list">
-      <PokemonCard v-for="pokemon in pokemons" :key="pokemon.name" :pokemon="pokemon" />
+      <PokemonCard
+        v-for="pokemon in paginatedPokemons"
+        :key="pokemon.id" 
+        :pokemon="pokemon" 
+      />
     </div>
-   
+    <Pagination
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      :onPageChange="changePage"
+    />
   </div>
 </template>
 
@@ -28,6 +36,31 @@ export default defineComponent({
     },
   },
   components: { PokemonCard, Pagination },
+  setup(props) {
+    const currentPage = ref(1);
+    const itemsPerPage = 8;
+
+    const totalPages = computed(() => {
+      return Math.ceil(props.pokemons.length / itemsPerPage);
+    });
+
+    const paginatedPokemons = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage; // Corrigido para usar 0-index
+      const end = start + itemsPerPage;
+      return props.pokemons.slice(start, end);
+    });
+
+    const changePage = (page: number) => {
+      currentPage.value = page;
+    };
+
+    return {
+      currentPage,
+      totalPages,
+      paginatedPokemons,
+      changePage,
+    };
+  },
 });
 </script>
 

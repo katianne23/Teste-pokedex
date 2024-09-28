@@ -12,19 +12,29 @@ interface Pokemon {
 export const usePokemon = () => {
     const pokemons: Ref<Pokemon[]> = ref([]);
 
-    const fetchPokemons = async (page: number) => {
-        try {
-            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`);
-            const pokemonPromises = response.data.results.map(async (pokemon: any) => {
-                const detailsResponse = await axios.get(pokemon.url);
-                return {
-                    id: detailsResponse.data.id,
-                    name: detailsResponse.data.name,
-                    sprites: detailsResponse.data.sprites
-                };
-            });
+    const fetchPokemons = async () => {
+        const totalPokemons = 1000; 
+        const limit = 100; 
+        const requests = []; 
 
-            pokemons.value = await Promise.all(pokemonPromises);
+        for (let offset = 0; offset < totalPokemons; offset += limit) {
+            requests.push(axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`));
+        }
+
+        try {
+            const responses = await Promise.all(requests); 
+            const pokemonPromises = responses.flatMap(response => 
+                response.data.results.map(async (pokemon: any) => {
+                    const detailsResponse = await axios.get(pokemon.url);
+                    return {
+                        id: detailsResponse.data.id,
+                        name: detailsResponse.data.name,
+                        sprites: detailsResponse.data.sprites
+                    };
+                })
+            );
+
+            pokemons.value = await Promise.all(pokemonPromises); // Aguarda todas as promessas de detalhes serem resolvidas
         } catch (error) {
             console.error("Erro ao carregar os Pokémon:", error);
         }
