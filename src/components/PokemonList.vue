@@ -1,6 +1,8 @@
 <template>
-  <div class="pokemon-list">
-    <PokemonCard v-for="pokemon in pokemons" :key="pokemon.name" :pokemon="pokemon" />
+  <div class="pokemon-lists">
+    <div class="pokemon-list">
+      <PokemonCard v-for="pokemon in pokemons" :key="pokemon.name" :pokemon="pokemon" />
+    </div>
   </div>
 </template>
 
@@ -26,3 +28,12 @@ export default defineComponent({
   components: { PokemonCard },
 });
 </script>
+
+<style scoped>
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+</style>

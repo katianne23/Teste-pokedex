@@ -1,39 +1,133 @@
 <template>
-    <div class="pokemon-card" v-if="pokemon">
-      <img :src="pokemon.sprites.front_default || 'path/to/default-image.png'" :alt="pokemon.name" />
-      <h3>{{ pokemon.name }}</h3>
-      <p>#{{ pokemon.id }}</p>
+  <div
+    class="pokemon-card"
+    v-if="pokemon"
+    :style="{ backgroundColor: backgroundColor, color: textColor }"
+  >
+    <div class="pokemon-image-container" :style="{ backgroundColor: textColor }">
+      <img
+        :src="pokemon.sprites.front_default || 'path/to/default-image.png'"
+        :alt="pokemon.name"
+        class="pokemon-image"
+      />
     </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from 'vue';
-  
-  interface Pokemon {
-      id: number;
-      name: string;
-      sprites: {
-          front_default: string;
+    <div class="pokemon-text">
+      <h3 class="pokemon-name">{{ pokemon.name }}</h3>
+      <p class="pokemon-id">{{ pokemon.id }}</p>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import axios from "axios";
+
+interface Pokemon {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+}
+
+export default defineComponent({
+  props: {
+    pokemon: {
+      type: Object as () => Pokemon,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      backgroundColor: "#fff",
+      textColor: "#000",
+    };
+  },
+  async mounted() {
+    try {
+      const speciesResponse = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon-species/${this.pokemon.id}`
+      );
+      const colorName = speciesResponse.data.color.name;
+
+      this.setPokemonColors(colorName);
+    } catch (error) {
+      console.error("Erro ao buscar cor do Pokémon:", error);
+    }
+  },
+  methods: {
+    setPokemonColors(colorName: string) {
+      const colorMap: { [key: string]: { bg: string; text: string } } = {
+        black: { bg: "#666666", text: "#111111" },
+        blue: { bg: "#a0e1f7", text: "#0073e6" },
+        brown: { bg: "#d9b594", text: "#8b4513" },
+        gray: { bg: "#d3d3d3", text: "#4f4f4f" },
+        green: { bg: "#b0e57c", text: "#008000" },
+        pink: { bg: "#ffcccb", text: "#ff69b4" },
+        purple: { bg: "#dda0dd", text: "#800080" },
+        red: { bg: "#f28b82", text: "#c62828" },
+        white: { bg: "#f8f8f8", text: "#C0C0C0" },
+        yellow: { bg: "#ffffcc", text: "#e7e772" },
       };
-  }
+
+      const color = colorMap[colorName] || { bg: "#ffffff", text: "#000000" };
+      this.backgroundColor = color.bg;
+      this.textColor = color.text;
+    },
+  },
+});
+</script>
+
+<style scoped>
+.pokemon-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 240px;
+  height: 300px;
+  transition: transform 0.2s;
+  margin: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pokemon-card:hover {
+  transform: scale(1.05);
+}
+
+.pokemon-image-container {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+}
+
+.pokemon-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.pokemon-text {
+  margin-top: 5%;
+}
+
+.pokemon-name {
+  font-size: 2em;
+  margin: 8px 0;
+  font-family: var(--kanit);
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.pokemon-id {
+  font-size: 0.9em;
+  font-weight: 800;
   
-  export default defineComponent({
-      props: {
-          pokemon: {
-              type: Object as () => Pokemon,
-              required: true
-          }
-      },
-      mounted() {
-          console.log('Imagem do Pokémon:', this.pokemon.sprites.front_default); // Verifique a URL da imagem
-      }
-  });
-  </script>
-  
-  <style scoped>
-  .pokemon-card img {
-      width: 100px; /* ou outro valor adequado */
-      height: auto; /* manter a proporção da imagem */
-  }
-  </style>
-  
+}
+</style>
