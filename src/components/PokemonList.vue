@@ -3,12 +3,14 @@
     <div class="pokemon-list">
       <PokemonCard v-for="pokemon in pokemons" :key="pokemon.name" :pokemon="pokemon" />
     </div>
+   
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import PokemonCard from "./PokemonCard.vue";
+import Pagination from "./Pagination.vue";
 
 interface Pokemon {
   id: number;
@@ -25,7 +27,7 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { PokemonCard },
+  components: { PokemonCard, Pagination },
 });
 </script>
 

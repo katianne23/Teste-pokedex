@@ -1,6 +1,7 @@
 <template>
     <div class="home-page">
       <PokemonList :pokemons="pokemons" />
+      
     </div>
   </template>
   
