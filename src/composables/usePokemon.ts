@@ -1,42 +1,34 @@
-import { ref } from "vue";
-import axios, { AxiosResponse } from "axios";
+import { ref, Ref } from 'vue';
+import axios from 'axios';
 
 interface Pokemon {
+    id: number;
     name: string;
-    url: string;
+    sprites: {
+        front_default: string;
+    };
 }
 
-interface PokemonResponse {
-    count: number;
-    results: Pokemon[];
-}
+export const usePokemon = () => {
+    const pokemons: Ref<Pokemon[]> = ref([]);
 
-interface TypeResponse {
-    pokemon: { pokemon: Pokemon }[];
-}
+    const fetchPokemons = async (page: number) => {
+        try {
+            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`);
+            const pokemonPromises = response.data.results.map(async (pokemon: any) => {
+                const detailsResponse = await axios.get(pokemon.url);
+                return {
+                    id: detailsResponse.data.id,
+                    name: detailsResponse.data.name,
+                    sprites: detailsResponse.data.sprites
+                };
+            });
 
-export function usePokemon() {
-    const pokemons = ref<Pokemon[]>([]);
-    const totalPages = ref<number>(0);
-    const baseUrl = 'https://pokeapi.co/api/v2';
-
-    const fetchPokemons = async (page: number = 1) => {
-        const response: AxiosResponse<PokemonResponse> = await axios.get(`${baseUrl}/pokemon?limit=20&offset=${(page - 1) * 20}`);
-        pokemons.value = response.data.results;
-        totalPages.value = Math.ceil(response.data.count / 20);
+            pokemons.value = await Promise.all(pokemonPromises);
+        } catch (error) {
+            console.error("Erro ao carregar os Pokémon:", error);
+        }
     };
 
-
-    const searchPokemon = async (query: string) => {
-        const response: AxiosResponse<any> = await axios.get(`${baseUrl}/pokemon/${query.toLowerCase()}`);
-        pokemons.value = [response.data];
-    };
-
-
-    const filterByType = async (type: string) => {
-        const response: AxiosResponse<TypeResponse> = await axios.get(`${baseUrl}/type/${type}`);
-        pokemons.value = response.data.pokemon.map((p) => p.pokemon);
-    };
-
-    return { pokemons, fetchPokemons, searchPokemon, filterByType, totalPages };
-}
+    return { pokemons, fetchPokemons };
+};
