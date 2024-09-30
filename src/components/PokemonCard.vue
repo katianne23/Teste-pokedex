@@ -18,15 +18,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+
 
 interface Pokemon {
   id: number;
   name: string;
   sprites: {
     front_default: string;
-    front_shiny?: string; // Optional: include if you want to use shiny sprites
-    front_female?: string; // Optional: female variant if available
+    front_shiny?: string; 
+    front_female?: string;
     other?: {
       [key: string]: {
         front_default: string;
@@ -80,18 +80,18 @@ export default defineComponent({
       this.textColor = color.text;
     },
     goToDetails() {
-      this.$router.push({ name: "PokemonDetails", params: { id: this.pokemon.id } }); // Navegação para detalhes
+      this.$router.push({ name: "PokemonDetails", params: { id: this.pokemon.id } });
     },
     getLargeImage(pokemon: Pokemon): string {
-      // Prioritize larger images if available
+   
       if (pokemon.sprites.other) {
-        // You can specify any other sprite you want from the `other` object
+    
         return (
           pokemon.sprites.other["official-artwork"].front_default ||
           pokemon.sprites.front_default
         );
       }
-      return pokemon.sprites.front_default; // Fallback to default
+      return pokemon.sprites.front_default; 
     },
   },
 });
@@ -127,8 +127,8 @@ export default defineComponent({
 }
 
 .pokemon-image {
-  width: 120px; /* Adjust size as needed */
-  height: 120px; /* Adjust size as needed */
+  width: 120px; 
+  height: 120px; 
   object-fit: contain;
 }
 
