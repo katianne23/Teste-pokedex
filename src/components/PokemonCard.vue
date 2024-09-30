@@ -2,14 +2,11 @@
   <div
     class="pokemon-card"
     v-if="pokemon"
+    @click="goToDetails"
     :style="{ backgroundColor: backgroundColor, color: textColor }"
   >
     <div class="pokemon-image-container" :style="{ backgroundColor: textColor }">
-      <img
-        :src="pokemon.sprites.front_default || 'path/to/default-image.png'"
-        :alt="pokemon.name"
-        class="pokemon-image"
-      />
+      <img :src="getLargeImage(pokemon)" :alt="pokemon.name" class="pokemon-image" />
     </div>
     <div class="pokemon-text">
       <h3 class="pokemon-name">{{ pokemon.name }}</h3>
@@ -21,12 +18,20 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 interface Pokemon {
   id: number;
   name: string;
   sprites: {
     front_default: string;
+    front_shiny?: string; // Optional: include if you want to use shiny sprites
+    front_female?: string; // Optional: female variant if available
+    other?: {
+      [key: string]: {
+        front_default: string;
+      };
+    };
   };
 }
 
@@ -74,6 +79,20 @@ export default defineComponent({
       this.backgroundColor = color.bg;
       this.textColor = color.text;
     },
+    goToDetails() {
+      this.$router.push({ name: "PokemonDetails", params: { id: this.pokemon.id } }); // Navegação para detalhes
+    },
+    getLargeImage(pokemon: Pokemon): string {
+      // Prioritize larger images if available
+      if (pokemon.sprites.other) {
+        // You can specify any other sprite you want from the `other` object
+        return (
+          pokemon.sprites.other["official-artwork"].front_default ||
+          pokemon.sprites.front_default
+        );
+      }
+      return pokemon.sprites.front_default; // Fallback to default
+    },
   },
 });
 </script>
@@ -108,8 +127,8 @@ export default defineComponent({
 }
 
 .pokemon-image {
-  width: 100px;
-  height: 100px;
+  width: 120px; /* Adjust size as needed */
+  height: 120px; /* Adjust size as needed */
   object-fit: contain;
 }
 
@@ -126,8 +145,8 @@ export default defineComponent({
 }
 
 .pokemon-id {
-  font-size: 0.9em;
+  font-size: 1em;
+  font-family: var(--kanit);
   font-weight: 800;
-  
 }
 </style>
