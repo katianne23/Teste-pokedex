@@ -1,5 +1,6 @@
 <template>
   <div class="pokemon-lists">
+    <SearchBar @search="handleSearch" />
     <div class="pokemon-list">
       <PokemonCard
         v-for="pokemon in paginatedPokemons"
@@ -19,6 +20,7 @@
 import { defineComponent, ref, computed } from "vue";
 import PokemonCard from "./PokemonCard.vue";
 import Pagination from "./Pagination.vue";
+import SearchBar from "./SearchBar.vue";
 
 interface Pokemon {
   id: number;
@@ -35,23 +37,41 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { PokemonCard, Pagination },
+  components: { PokemonCard, Pagination, SearchBar },
+
   setup(props) {
     const currentPage = ref(1);
     const itemsPerPage = 8;
+    const searchTerm = ref("");
 
     const totalPages = computed(() => {
-      return Math.ceil(props.pokemons.length / itemsPerPage);
+      return Math.ceil(filteredPokemons.value.length / itemsPerPage);
     });
 
+    const filteredPokemons = computed(() => {
+      if (!searchTerm.value) {
+        return props.pokemons;
+      }
+      return props.pokemons.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        pokemon.id.toString() === searchTerm.value
+      );
+    });
+
+
     const paginatedPokemons = computed(() => {
-      const start = (currentPage.value - 1) * itemsPerPage; // Corrigido para usar 0-index
+      const start = (currentPage.value - 1) * itemsPerPage; 
       const end = start + itemsPerPage;
-      return props.pokemons.slice(start, end);
+      return filteredPokemons.value.slice(start, end);
     });
 
     const changePage = (page: number) => {
       currentPage.value = page;
+    };
+
+    const handleSearch = (term: string) => {
+      searchTerm.value = term;
+      currentPage.value = 1;
     };
 
     return {
@@ -59,6 +79,7 @@ export default defineComponent({
       totalPages,
       paginatedPokemons,
       changePage,
+      handleSearch,
     };
   },
 });
