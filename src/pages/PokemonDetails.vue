@@ -84,11 +84,11 @@ export default defineComponent({
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${this.id}`);
         this.pokemon = response.data;
 
-        // Agora busca a espécie do Pokémon para obter a cor
+  
         const speciesResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon-species/${this.id}`
         );
-        const colorName = speciesResponse.data.color.name; // Nome da cor
+        const colorName = speciesResponse.data.color.name;
         this.setPokemonColors(colorName);
       } catch (error) {
         console.error("Erro ao buscar detalhes do Pokémon:", error);

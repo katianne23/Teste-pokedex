@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="search-bar">
     <input
       type="text"

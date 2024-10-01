@@ -29,12 +29,13 @@ export const usePokemon = () => {
                     return {
                         id: detailsResponse.data.id,
                         name: detailsResponse.data.name,
-                        sprites: detailsResponse.data.sprites
+                        sprites: detailsResponse.data.sprites,
+                        types: detailsResponse.data.types.map((t: any) => t.type.name),
                     };
                 })
             );
 
-            pokemons.value = await Promise.all(pokemonPromises); // Aguarda todas as promessas de detalhes serem resolvidas
+            pokemons.value = await Promise.all(pokemonPromises); 
         } catch (error) {
             console.error("Erro ao carregar os Pokémon:", error);
         }

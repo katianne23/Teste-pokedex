@@ -1,11 +1,12 @@
 <template>
   <div class="pokemon-lists">
     <SearchBar @search="handleSearch" />
+    <TypeFilter @filter="handleTypeFilter" />
     <div class="pokemon-list">
       <PokemonCard
         v-for="pokemon in paginatedPokemons"
-        :key="pokemon.id" 
-        :pokemon="pokemon" 
+        :key="pokemon.id"
+        :pokemon="pokemon"
       />
     </div>
     <Pagination
@@ -21,6 +22,7 @@ import { defineComponent, ref, computed } from "vue";
 import PokemonCard from "./PokemonCard.vue";
 import Pagination from "./Pagination.vue";
 import SearchBar from "./SearchBar.vue";
+import TypeFilter from "./TypeFilter.vue";
 
 interface Pokemon {
   id: number;
@@ -28,6 +30,7 @@ interface Pokemon {
   sprites: {
     front_default: string;
   };
+  types: string[];
 }
 
 export default defineComponent({
@@ -37,30 +40,40 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { PokemonCard, Pagination, SearchBar },
+  components: { PokemonCard, Pagination, SearchBar, TypeFilter },
 
   setup(props) {
     const currentPage = ref(1);
     const itemsPerPage = 8;
     const searchTerm = ref("");
+    const selectedType = ref("");
 
     const totalPages = computed(() => {
       return Math.ceil(filteredPokemons.value.length / itemsPerPage);
     });
 
     const filteredPokemons = computed(() => {
-      if (!searchTerm.value) {
-        return props.pokemons;
+      let filtered = props.pokemons;
+
+      if (searchTerm.value) {
+        filtered = filtered.filter(
+          (pokemon) =>
+            pokemon.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            pokemon.id.toString() === searchTerm.value
+        );
       }
-      return props.pokemons.filter(pokemon =>
-        pokemon.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-        pokemon.id.toString() === searchTerm.value
-      );
+
+      if (selectedType.value) {
+        filtered = filtered.filter((pokemon) =>
+          pokemon.types.includes(selectedType.value)
+        );
+      }
+
+      return filtered;
     });
 
-
     const paginatedPokemons = computed(() => {
-      const start = (currentPage.value - 1) * itemsPerPage; 
+      const start = (currentPage.value - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       return filteredPokemons.value.slice(start, end);
     });
@@ -74,12 +87,18 @@ export default defineComponent({
       currentPage.value = 1;
     };
 
+    const handleTypeFilter = (type: string) => {
+      selectedType.value = type;
+      currentPage.value = 1;
+    };
+
     return {
       currentPage,
       totalPages,
       paginatedPokemons,
       changePage,
       handleSearch,
+      handleTypeFilter,
     };
   },
 });
