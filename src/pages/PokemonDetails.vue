@@ -150,25 +150,25 @@ export default defineComponent({
   font-family: var(--kanit);
   font-weight: 800;
   text-transform: capitalize;
-  text-align: center; 
+  text-align: center;
 }
 
 .image-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; 
-  max-width: 300px; 
+  width: 100%;
+  max-width: 300px;
   height: auto;
   border-radius: 50%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  margin: 20px auto; 
+  margin: 20px auto;
 }
 
 .image-container img {
-  width: 100%; 
-  height: auto; 
-  max-width: 250px; 
+  width: 100%;
+  height: auto;
+  max-width: 250px;
   object-fit: contain;
 }
 
@@ -184,9 +184,9 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%; 
-  max-width: 400px; 
-  margin: 20px auto; 
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
 }
 
 .stats,
@@ -218,7 +218,7 @@ export default defineComponent({
 }
 
 .stats li {
-  font-size: 0.9em; 
+  font-size: 0.9em;
   margin-bottom: 5px;
 }
 
@@ -228,7 +228,7 @@ export default defineComponent({
 }
 
 .stat-label {
-  font-size: 0.9em; 
+  font-size: 0.9em;
   margin-bottom: 5px;
 }
 
@@ -246,7 +246,7 @@ export default defineComponent({
 }
 
 .types {
-  margin: 20px auto; 
+  margin: 20px auto;
 }
 
 .types span {
@@ -259,20 +259,75 @@ export default defineComponent({
   margin-right: 5px;
 }
 
+.type-normal {
+  background-color: #a8a77a;
+}
+.type-fire {
+  background-color: #ee8130;
+}
+.type-water {
+  background-color: #6390f0;
+}
+.type-electric {
+  background-color: #f7d02c;
+}
+.type-grass {
+  background-color: #7ac74c;
+}
+.type-ice {
+  background-color: #96d9d6;
+}
+.type-fighting {
+  background-color: #c22e28;
+}
+.type-poison {
+  background-color: #a33ea1;
+}
+.type-ground {
+  background-color: #e2bf65;
+}
+.type-flying {
+  background-color: #a98ff3;
+}
+.type-psychic {
+  background-color: #f95587;
+}
+.type-bug {
+  background-color: #a6b91a;
+}
+.type-rock {
+  background-color: #b6a136;
+}
+.type-ghost {
+  background-color: #735797;
+}
+.type-dragon {
+  background-color: #6f35fc;
+}
+.type-dark {
+  background-color: #705746;
+}
+.type-steel {
+  background-color: #b7b7ce;
+}
+.type-fairy {
+  background-color: #d685ad;
+}
+
 .evolution-chain {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 .evolution-item {
   text-align: center;
-  margin: 10px; 
+  margin: 10px;
 }
 
 .evolution-item img {
   max-width: 100px;
-  height: auto; 
+  height: auto;
   margin-bottom: 5px;
 }
 
@@ -282,14 +337,13 @@ export default defineComponent({
   font-weight: 400;
 }
 
-
 @media (max-width: 600px) {
   .pokemon-name {
-    font-size: 1.5em; 
+    font-size: 1.5em;
   }
 
   .image-container img {
-    width: 90%; 
+    width: 90%;
   }
 
   .evolution-chain {
@@ -300,8 +354,7 @@ export default defineComponent({
   .stats,
   .types,
   .evolutions {
-    font-size: 1em; 
+    font-size: 1em;
   }
-
 }
 </style>

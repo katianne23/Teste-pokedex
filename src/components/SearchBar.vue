@@ -17,6 +17,7 @@ export default defineComponent({
   emits: ["search"],
   setup(_, { emit }) {
     const searchTerm = ref("");
+    
 
     const onInput = () => {
       emit("search", searchTerm.value);
