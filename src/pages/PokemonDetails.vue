@@ -9,10 +9,7 @@
             :alt="pokemon.name"
           />
         </div>
-        <div
-          class="stats"
-          :style="{ color: textColor }"
-        >
+        <div class="stats" :style="{ color: textColor }">
           <h3>Estatísticas</h3>
           <ul>
             <li v-for="stat in pokemon.stats" :key="stat.stat.name" class="stat-item">
@@ -20,12 +17,14 @@
               <div class="stat-bar-container">
                 <div
                   class="stat-bar"
-                  :style="{ width: stat.base_stat + '%', backgroundColor: backgroundColor }"
+                  :style="{
+                    width: stat.base_stat + '%',
+                    backgroundColor: backgroundColor,
+                  }"
                 ></div>
               </div>
             </li>
           </ul>
-          
         </div>
       </div>
       <div class="types">
@@ -84,7 +83,6 @@ export default defineComponent({
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${this.id}`);
         this.pokemon = response.data;
 
-  
         const speciesResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon-species/${this.id}`
         );
@@ -152,22 +150,25 @@ export default defineComponent({
   font-family: var(--kanit);
   font-weight: 800;
   text-transform: capitalize;
+  text-align: center; 
 }
 
 .image-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 300px;
-  height: 300px;
-  border-radius:50%;
+  width: 100%; 
+  max-width: 300px; 
+  height: auto;
+  border-radius: 50%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  margin-top: 3%;
+  margin: 20px auto; 
 }
 
 .image-container img {
-  width: 250px;
-  height: 250px;
+  width: 100%; 
+  height: auto; 
+  max-width: 250px; 
   object-fit: contain;
 }
 
@@ -183,9 +184,9 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 400px;
-  height: 300px;
-  margin-top: 50%;
+  width: 100%; 
+  max-width: 400px; 
+  margin: 20px auto; 
 }
 
 .stats,
@@ -213,11 +214,11 @@ export default defineComponent({
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 30px;
+  gap: 15px;
 }
 
 .stats li {
-  font-size: 1em;
+  font-size: 0.9em; 
   margin-bottom: 5px;
 }
 
@@ -227,16 +228,16 @@ export default defineComponent({
 }
 
 .stat-label {
-  font-size: 1em;
+  font-size: 0.9em; 
   margin-bottom: 5px;
 }
 
 .stat-bar-container {
-  background-color: #e0e0e0; 
+  background-color: #e0e0e0;
   border-radius: 10px;
   overflow: hidden;
   height: 20px;
-  width: 100%; 
+  width: 100%;
 }
 
 .stat-bar {
@@ -245,8 +246,7 @@ export default defineComponent({
 }
 
 .types {
-  margin-top: 30%;
-  margin-bottom: 10%;
+  margin: 20px auto; 
 }
 
 .types span {
@@ -262,16 +262,18 @@ export default defineComponent({
 .evolution-chain {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap; 
 }
 
 .evolution-item {
   text-align: center;
+  margin: 10px; 
 }
 
 .evolution-item img {
   max-width: 100px;
+  height: auto; 
   margin-bottom: 5px;
-  margin-top: 10px;
 }
 
 .evolution-item p {
@@ -280,76 +282,26 @@ export default defineComponent({
   font-weight: 400;
 }
 
-.type-normal {
-  background-color: #A8A77A;
-}
 
-.type-fire {
-  background-color: #EE8130;
-}
+@media (max-width: 600px) {
+  .pokemon-name {
+    font-size: 1.5em; 
+  }
 
-.type-water {
-  background-color: #6390F0;
-}
+  .image-container img {
+    width: 90%; 
+  }
 
-.type-electric {
-  background-color: #F7D02C;
-}
+  .evolution-chain {
+    display: flex;
+    justify-content: center;
+  }
 
-.type-grass {
-  background-color: #7AC74C;
-}
+  .stats,
+  .types,
+  .evolutions {
+    font-size: 1em; 
+  }
 
-.type-ice {
-  background-color: #96D9D6;
 }
-
-.type-fighting {
-  background-color: #C22E28;
-}
-
-.type-poison {
-  background-color: #A33EA1;
-}
-
-.type-ground {
-  background-color: #E2BF65;
-}
-
-.type-flying {
-  background-color: #A98FF3;
-}
-
-.type-psychic {
-  background-color: #F95587;
-}
-
-.type-bug {
-  background-color: #A6B91A;
-}
-
-.type-rock {
-  background-color: #B6A136;
-}
-
-.type-ghost {
-  background-color: #735797;
-}
-
-.type-dragon {
-  background-color: #6F35FC;
-}
-
-.type-dark {
-  background-color: #705746;
-}
-
-.type-steel {
-  background-color: #B7B7CE;
-}
-
-.type-fairy {
-  background-color: #D685AD;
-}
-
 </style>
