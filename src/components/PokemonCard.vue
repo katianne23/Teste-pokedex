@@ -11,21 +11,23 @@
     <div class="pokemon-text">
       <h3 class="pokemon-name">{{ pokemon.name }}</h3>
       <p class="pokemon-id">{{ pokemon.id }}</p>
+      <div @click.stop="toggleFavorite" :style="{ color: textColor }" class="button">
+        {{ isFavorite ? "★ " : "☆ " }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import axios from "axios";
-
 
 interface Pokemon {
   id: number;
   name: string;
   sprites: {
     front_default: string;
-    front_shiny?: string; 
+    front_shiny?: string;
     front_female?: string;
     other?: {
       [key: string]: {
@@ -46,6 +48,31 @@ export default defineComponent({
     return {
       backgroundColor: "#fff",
       textColor: "#000",
+    };
+  },
+  setup(props) {
+    const isFavorite = ref(checkIfFavorite());
+
+    function checkIfFavorite() {
+      const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+      return favorites.includes(props.pokemon.id);
+    }
+
+    function toggleFavorite() {
+      let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+      if (isFavorite.value) {
+        favorites = favorites.filter((id: number) => id !== props.pokemon.id);
+      } else {
+        favorites.push(props.pokemon.id);
+      }
+
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      isFavorite.value = !isFavorite.value;
+    }
+    return {
+      isFavorite,
+      toggleFavorite,
     };
   },
   async mounted() {
@@ -83,15 +110,13 @@ export default defineComponent({
       this.$router.push({ name: "PokemonDetails", params: { id: this.pokemon.id } });
     },
     getLargeImage(pokemon: Pokemon): string {
-   
       if (pokemon.sprites.other) {
-    
         return (
           pokemon.sprites.other["official-artwork"].front_default ||
           pokemon.sprites.front_default
         );
       }
-      return pokemon.sprites.front_default; 
+      return pokemon.sprites.front_default;
     },
   },
 });
@@ -102,8 +127,8 @@ export default defineComponent({
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
-  width: 240px;
-  height: 300px;
+  width: 250px;
+  height: 320px;
   transition: transform 0.2s;
   margin: 16px;
   cursor: pointer;
@@ -127,8 +152,8 @@ export default defineComponent({
 }
 
 .pokemon-image {
-  width: 120px; 
-  height: 120px; 
+  width: 120px;
+  height: 120px;
   object-fit: contain;
 }
 
@@ -148,5 +173,11 @@ export default defineComponent({
   font-size: 1em;
   font-family: var(--kanit);
   font-weight: 800;
+  margin-bottom: 0;
+  font-weight: 800;
+}
+
+.button {
+  font-size: 2em;
 }
 </style>
