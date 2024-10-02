@@ -40,7 +40,7 @@ export default defineComponent({
 
 .search-input {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   padding: 12px 20px;
   border-radius: 25px;
   border: 1px solid #ccc;

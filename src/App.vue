@@ -43,16 +43,11 @@ export default {
 </script>
 
 <style scoped>
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  margin: 0;
-}
-
 header {
-  width: 400px;
+  width: 100%;
+  max-width: 400px; 
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .title {
@@ -104,14 +99,34 @@ footer a {
 }
 
 @media (max-width: 768px) {
+  header {
+    width: 90%; 
+  }
+  
   .title {
     width: 80%;
+  }
+
+  .link {
+    font-size: 1.1em;
   }
 }
 
 @media (max-width: 480px) {
+  header {
+    padding: 0;
+  }
+
   .title {
     width: 60%;
+  }
+
+  .link {
+    font-size: 1em;
+  }
+
+  footer p {
+    font-size: 0.8em;
   }
 }
 </style>
