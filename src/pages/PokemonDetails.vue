@@ -1,57 +1,59 @@
 <template>
-  <div v-if="pokemon">
-    <div class="pokemon-details" :style="{ color: textColor }">
-      <h2 class="pokemon-name">{{ pokemon.name }} <br />{{ pokemon.id }}</h2>
-      <div class="pokemon-container">
-        <div class="image-container">
-          <img
-            :src="pokemon.sprites.other['official-artwork'].front_default"
-            :alt="pokemon.name"
-          />
-        </div>
-        <div class="stats" :style="{ color: textColor }">
-          <h3>Estatísticas</h3>
-          <ul>
-            <li v-for="stat in pokemon.stats" :key="stat.stat.name" class="stat-item">
-              <div class="stat-label">{{ stat.stat.name }}: {{ stat.base_stat }}</div>
-              <div class="stat-bar-container">
-                <div
-                  class="stat-bar"
-                  :style="{
-                    width: stat.base_stat + '%',
-                    backgroundColor: backgroundColor,
-                  }"
-                ></div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="types">
-        <h3>Tipos</h3>
-        <span
-          v-for="type in pokemon.types"
-          :key="type.type.name"
-          :class="`type-${type.type.name}`"
-        >
-          {{ type.type.name }}
-        </span>
-      </div>
-
-      <div class="evolutions" v-if="evolutions.length">
-        <h3>Evoluções</h3>
-        <div class="evolution-chain">
-          <div v-for="evo in evolutions" :key="evo.id" class="evolution-item">
+  <transition name="fade">
+    <div v-if="pokemon">
+      <div class="pokemon-details" :style="{ color: textColor }">
+        <h2 class="pokemon-name">{{ pokemon.name }} <br />{{ pokemon.id }}</h2>
+        <div class="pokemon-container">
+          <div class="image-container">
             <img
-              :src="evo.sprites.other['official-artwork'].front_default"
-              :alt="evo.name"
+              :src="pokemon.sprites.other['official-artwork'].front_default"
+              :alt="pokemon.name"
             />
-            <p>{{ evo.name }}</p>
+          </div>
+          <div class="stats" :style="{ color: textColor }">
+            <h3>Estatísticas</h3>
+            <ul>
+              <li v-for="stat in pokemon.stats" :key="stat.stat.name" class="stat-item">
+                <div class="stat-label">{{ stat.stat.name }}: {{ stat.base_stat }}</div>
+                <div class="stat-bar-container">
+                  <div
+                    class="stat-bar"
+                    :style="{
+                      width: stat.base_stat + '%',
+                      backgroundColor: backgroundColor,
+                    }"
+                  ></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="types">
+          <h3>Tipos</h3>
+          <span
+            v-for="type in pokemon.types"
+            :key="type.type.name"
+            :class="`type-${type.type.name}`"
+          >
+            {{ type.type.name }}
+          </span>
+        </div>
+
+        <div class="evolutions" v-if="evolutions.length">
+          <h3>Evoluções</h3>
+          <div class="evolution-chain">
+            <div v-for="evo in evolutions" :key="evo.id" class="evolution-item">
+              <img
+                :src="evo.sprites.other['official-artwork'].front_default"
+                :alt="evo.name"
+              />
+              <p>{{ evo.name }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -336,6 +338,18 @@ export default defineComponent({
   font-family: var(--Nunito);
   font-weight: 400;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+
 
 @media (max-width: 600px) {
   .pokemon-name {

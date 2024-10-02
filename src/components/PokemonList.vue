@@ -4,14 +4,13 @@
     <TypeFilter @filter="handleTypeFilter" />
 
     <div v-if="isLoading" class="loading">
-      <div class="pokemon">
-      </div>
+      <div class="pokemon"></div>
     </div>
-    
-    <div v-if="!isLoading &&  filteredPokemons.length === 0" class="no-pokemon">
-      <p>Nenhum pokemon encontrado!!</p>
+
+    <div v-if="!isLoading && errorMessage" class="no-pokemon">
+      <p>{{ errorMessage }}</p>
     </div>
-    
+
     <div v-else class="pokemon-list">
       <PokemonCard
         v-for="pokemon in paginatedPokemons"
@@ -21,7 +20,7 @@
     </div>
 
     <Pagination
-      v-if="!isLoading &&  filteredPokemons.length > 0"
+      v-if="!isLoading && filteredPokemons.length > 0"
       :currentPage="currentPage"
       :totalPages="totalPages"
       :onPageChange="changePage"
@@ -35,6 +34,7 @@ import PokemonCard from "./PokemonCard.vue";
 import Pagination from "./Pagination.vue";
 import SearchBar from "./SearchBar.vue";
 import TypeFilter from "./TypeFilter.vue";
+const errorMessage = ref("");
 
 interface Pokemon {
   id: number;
@@ -62,8 +62,8 @@ export default defineComponent({
     const isLoading = ref(true);
 
     setTimeout(() => {
-      isLoading.value = false; 
-    }, 1000); 
+      isLoading.value = false;
+    }, 1000);
 
     const totalPages = computed(() => {
       return Math.ceil(filteredPokemons.value.length / itemsPerPage);
@@ -84,6 +84,12 @@ export default defineComponent({
         filtered = filtered.filter((pokemon) =>
           pokemon.types.includes(selectedType.value)
         );
+      }
+
+      if (!isLoading.value && filtered.length === 0) {
+        errorMessage.value = "Nenhum Pokémon encontrado!";
+      } else {
+        errorMessage.value = "";
       }
 
       return filtered;
@@ -107,17 +113,24 @@ export default defineComponent({
     const handleTypeFilter = (type: string) => {
       selectedType.value = type;
       currentPage.value = 1;
+
+      if (!isLoading.value && filteredPokemons.value.length === 0) {
+        errorMessage.value = `Nenhum Pokémon encontrado do tipo ${type}.`;
+      } else {
+        errorMessage.value = "";
+      }
     };
 
     return {
       currentPage,
       totalPages,
       paginatedPokemons,
-      filteredPokemons ,
+      filteredPokemons,
       changePage,
       handleSearch,
       handleTypeFilter,
       isLoading,
+      errorMessage,
     };
   },
 });
@@ -150,18 +163,18 @@ export default defineComponent({
 }
 
 .pokemon::before {
-  content: '';
+  content: "";
   position: absolute;
-  height: 8px; 
-  width: 100%; 
+  height: 8px;
+  width: 100%;
   background: black;
-  top: 50%; 
+  top: 50%;
   left: 0;
-  transform: translateY(-50%); 
+  transform: translateY(-50%);
 }
 
 .pokemon::after {
-  content: '';
+  content: "";
   position: absolute;
   height: 38px;
   width: 38px;
@@ -181,7 +194,6 @@ export default defineComponent({
   font-size: 1.5em;
   color: #555;
 }
-
 
 @keyframes spin {
   from {

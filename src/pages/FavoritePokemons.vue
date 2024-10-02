@@ -80,6 +80,7 @@ a {
   text-decoration: none;
   color: #000;
   cursor: pointer;
+  animation: animation 1.5s infinite;
 }
 
 .pokemon-list {
@@ -93,5 +94,15 @@ a {
 
 .pokemon-list > * {
   margin-bottom: 20px;
+}
+
+@keyframes animation {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    color: yellow;
+  }
 }
 </style>

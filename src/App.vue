@@ -20,6 +20,7 @@
 
     <footer>
       <p>&copy; 2024 - Pokédex App</p>
+      <p>Desenvolvido por <a href="https://website-katianne.vercel.app/">Katianne Araújo</a></p>
     </footer>
   </div>
 </template>
@@ -75,30 +76,6 @@ nav {
   color: #000;
 }
 
-.house {
-  position: absolute;
-  top: 30%;
-  left: 30%;
-  width: 40px;
-  height: 40px;
-  background-color: #8B4513; /* Cor da casa */
-  border: 2px solid #000;
-  box-sizing: border-box;
-}
-
-.house:before {
-  content: "";
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 22px solid transparent;
-  border-right: 22px solid transparent;
-  border-bottom: 25px solid #8B4513; /* Telhado */
-}
-
 main {
   flex: 1;
   display: flex;
@@ -112,6 +89,18 @@ footer {
   padding: 10px 0;
   margin-top: 30px;
   margin-bottom: 0;
+}
+
+footer p {
+  font-size: 0.9em;
+  font-family: var(--Nunito);
+  color: #000;
+}
+
+footer a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
