@@ -12,6 +12,7 @@
   
   export default {
     components: { PokemonList },
+    
     setup() {
       const { pokemons, fetchPokemons } = usePokemon();
   

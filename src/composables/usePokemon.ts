@@ -7,6 +7,7 @@ interface Pokemon {
     sprites: {
         front_default: string;
     };
+    types: string[];
 }
 
 export const usePokemon = () => {
